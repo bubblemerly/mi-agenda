@@ -1,0 +1,12 @@
+MI AGENDA FRESITA — sitio web instalable
+
+Archivos:
+- index.html: agenda
+- manifest.webmanifest: nombre e instalación como app web
+- sw.js: caché básica para volver a abrir el sitio sin conexión después de visitarlo
+- icon-192.png / icon-512.png: iconos
+
+IMPORTANTE:
+Este paquete todavía NO está publicado en internet. Para que tenga una dirección web pública y pueda instalarse en iPhone, súbelo a un servicio de alojamiento HTTPS, por ejemplo GitHub Pages o Netlify.
+La agenda guarda tareas en el almacenamiento local del navegador. No sincroniza entre dispositivos.
+Las notificaciones push reales todavía no están implementadas. El service worker incluido solo prepara la base instalable/offline.

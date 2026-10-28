@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff1f6">
+<meta name="description" content="Mi agenda Fresita: calendario, pendientes, parciales y fechas importantes.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Fresita · Mi agenda</title>
+<style>
+:root{--pink:#e879a7;--deep:#9f426d;--pale:#fff1f6;--cream:#fffaf7;--ink:#493943;--muted:#9b8490;--line:#f2dce6;--green:#7eaa91;--shadow:0 8px 28px #a84f7412;--matrix-pink:#ffdce5;--matrix-blue:#dceeff;--matrix-yellow:#fff0d6;--matrix-green:#def5e4}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff3f7 0,#fffaf8 360px,#fffaf8 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:780px;margin:auto;padding:env(safe-area-inset-top) 16px calc(28px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 2px 14px}.eyebrow{display:none;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--deep);font-weight:750}.brand{font-size:28px;font-weight:850;letter-spacing:-1px;margin-top:3px}.brand span{color:var(--pink)}.flower{width:48px;height:48px;border-radius:17px;background:white;display:grid;place-items:center;font-size:25px;box-shadow:var(--shadow)}
+.hero{background:linear-gradient(135deg,#f8c9dc,#fce5ed 65%,#fff4f7);border:1px solid #f5d6e3;border-radius:25px;padding:21px 20px;margin:8px 0 18px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"♡";position:absolute;font-size:100px;color:#fff8;right:10px;bottom:-32px;transform:rotate(-15deg)}.hero h1{font-size:25px;margin:0 0 5px;letter-spacing:-.7px}.hero p{margin:0;color:#81546a;font-size:14px}.hero .date{margin-top:18px;font-size:13px;font-weight:700;color:#8c4668}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:22px}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:13px 12px;box-shadow:var(--shadow)}.stat b{display:block;font-size:23px;color:var(--deep)}.stat span{font-size:11px;color:var(--muted);font-weight:650}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 12px}.section-head h2{font-size:18px;margin:0;letter-spacing:-.3px}.subtle{font-size:12px;color:var(--muted)}.tabs{display:flex;gap:7px;background:#f9e8ef;padding:5px;border-radius:14px;margin:12px 0 15px}.tabs button{border:0;background:transparent;color:#98667e;border-radius:10px;padding:9px 12px;font-weight:700;font-size:13px;flex:1}.tabs button.active{background:white;color:var(--deep);box-shadow:0 3px 10px #a84f7412}
+.panel{background:#fff;border:1px solid var(--line);border-radius:21px;padding:15px;box-shadow:var(--shadow)}.month-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.month-nav strong{font-size:16px}.nav-btn{border:1px solid var(--line);background:#fff7fa;border-radius:10px;width:34px;height:34px;color:var(--deep);font-size:18px}.weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.weekdays div{text-align:center;font-size:10px;font-weight:750;color:var(--muted);padding:7px 0}.day-placeholder{min-height:48px;display:block}.day-placeholder{min-height:48px}.day{min-height:48px;border:1px solid transparent;border-radius:12px;background:white;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px}.day.other{color:#d3c0c9}.day.selected{background:var(--pink);color:white;font-weight:800}.day.today:not(.selected){border-color:var(--pink);color:var(--deep);font-weight:800}.dots{display:flex;gap:3px;height:4px}.dots i{display:block;width:4px;height:4px;background:#d875a1;border-radius:50%}.day.selected .dots i{background:white}
+.task-list{display:flex;flex-direction:column;gap:9px}
+.matrix-section{margin:22px 0}.matrix-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.matrix-card{border:1px solid #ffffffaa;border-radius:23px;padding:15px 13px;min-height:180px;box-shadow:0 6px 18px #49394308}.matrix-card.pink{background:var(--matrix-pink);color:#9d294e}.matrix-card.blue{background:var(--matrix-blue);color:#205c9c}.matrix-card.yellow{background:var(--matrix-yellow);color:#9b681b}.matrix-card.green{background:var(--matrix-green);color:#287749}.matrix-title{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:850;gap:5px}.matrix-desc{font-size:11px;opacity:.8;margin:5px 0 14px}.matrix-add{border:0;background:transparent;color:inherit;font-size:25px;line-height:1;padding:0 3px}.matrix-items{display:flex;flex-direction:column;gap:10px}.matrix-item{display:flex;align-items:flex-start;gap:7px;color:#433740;font-size:12px;line-height:1.35}.matrix-item .check{width:17px;height:17px;border-radius:50%;border-color:currentColor;background:transparent;margin:0}.matrix-item .task-title{font-size:12px}.matrix-item .task-meta{font-size:10px;margin-top:3px;color:#6c5b66}.matrix-empty{font-size:11px;opacity:.65;text-align:center;padding:12px 2px}.matrix-item .delete{font-size:15px;color:#6c5b66}.calendar-section{margin-bottom:20px}.calendar-section .panel{padding:14px}.task{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px}.check{width:21px;height:21px;flex-shrink:0;border:1.7px solid #e4a6c1;border-radius:7px;background:white;margin-top:1px;display:grid;place-items:center;color:white}.task.done .check{background:var(--green);border-color:var(--green)}.task.done .task-title{text-decoration:line-through;color:#b9aab1}.task-content{min-width:0;flex:1}.task-title{font-size:14px;font-weight:750;overflow-wrap:anywhere}.task-meta{font-size:11px;color:var(--muted);margin-top:5px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.pill{display:inline-block;border-radius:7px;padding:3px 7px;background:#fff0f5;color:#a34f75;font-weight:700;font-size:10px}.pill.exam{background:#fff0e2;color:#b87535}.pill.personal{background:#edf6ef;color:#568267}.delete{border:0;background:transparent;color:#c3a6b4;font-size:19px;padding:0 2px}
+.empty{text-align:center;padding:28px 12px;color:var(--muted);font-size:13px}.empty strong{display:block;color:var(--deep);font-size:15px;margin:8px}
+.primary{background:var(--deep);color:white;border:0;border-radius:15px;padding:14px 17px;font-weight:800;box-shadow:0 6px 14px #9f426d24}.addbar{display:flex;gap:9px;margin:14px 0 8px}.addbar .primary{flex:1}.secondary{background:white;border:1px solid var(--line);border-radius:14px;padding:12px;color:var(--deep);font-weight:750}
+.form-panel{display:none;margin-top:12px}.form-panel.open{display:block}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:750;color:#91647a}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:#fffbfd;border-radius:12px;padding:11px;color:var(--ink);outline-color:#e7a0bd;min-width:0}.field textarea{resize:vertical;min-height:60px}.form-actions{display:flex;gap:8px;margin-top:12px}.form-actions button{flex:1}
+.bottom-note{text-align:center;font-size:11px;color:#b39aa7;padding:20px 10px 8px}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#553648;color:white;padding:12px 18px;border-radius:14px;font-size:13px;box-shadow:var(--shadow);display:none;max-width:90vw}
+@media(min-width:650px){.app{padding-left:24px;padding-right:24px}.calendar-grid{gap:6px}.day{min-height:56px}.matrix-card{min-height:210px}}
+@media(max-width:390px){.app{padding-left:12px;padding-right:12px}.brand{font-size:25px}.day-placeholder{min-height:42px}.day{min-height:42px}.hero h1{font-size:22px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand">Mi agenda <span>♡</span></div><div class="flower">🌷</div></header>
+<section class="hero"><h1>Tu vida, en orden</h1><p>Todo lo importante tiene su lugar.</p><div class="date" id="todayLabel"></div></section>
+<div class="stats"><div class="stat"><b id="statToday">0</b><span>PARA HOY</span></div><div class="stat"><b id="statPending">0</b><span>PENDIENTES</span></div><div class="stat"><b id="statDone">0</b><span>COMPLETAS</span></div></div>
+<section class="calendar-section">
+<div class="section-head"><h2>♡ Tu calendario</h2><span class="subtle">elige un día</span></div>
+<div class="panel"><div class="month-nav"><button class="nav-btn" id="prevMonth" aria-label="Mes anterior">‹</button><strong id="monthTitle"></strong><button class="nav-btn" id="nextMonth" aria-label="Mes siguiente">›</button></div><div class="weekdays"><div>LUN</div><div>MAR</div><div>MIÉ</div><div>JUE</div><div>VIE</div><div>SÁB</div><div>DOM</div></div><div class="calendar-grid" id="calendarGrid"></div></div>
+</section>
+<section class="matrix-section">
+<div class="section-head"><h2>♡ Mis tareas</h2><span class="subtle">todo en un solo lugar</span></div>
+<div class="matrix-grid">
+<div class="matrix-card pink"><div class="matrix-title">Pendientes <button class="matrix-add" data-matrix-add="now" aria-label="Añadir pendiente">＋</button></div><div class="matrix-desc">Todo lo que tienes por hacer</div><div class="matrix-items" id="matrix-now"></div></div>
+
+<div class="matrix-card yellow"><div class="matrix-title">Parciales <button class="matrix-add" data-matrix-add="delegate" aria-label="Añadir parcial">＋</button></div><div class="matrix-desc">Exámenes y evaluaciones</div><div class="matrix-items" id="matrix-delegate"></div></div>
+<div class="matrix-card green"><div class="matrix-title">Fechas importantes <button class="matrix-add" data-matrix-add="later" aria-label="Añadir fecha importante">＋</button></div><div class="matrix-desc">Eventos y fechas que no quieres olvidar</div><div class="matrix-items" id="matrix-later"></div></div>
+</div>
+</section>
+<section class="section-block">
+
+<div class="task-list" id="taskList"></div>
+<div class="addbar"><button class="primary" id="openForm">＋ Añadir tarea o evento</button></div>
+<div class="panel form-panel" id="formPanel"><form id="taskForm"><div class="form-grid">
+<div class="field full"><label for="taskName">¿Qué tienes que hacer?</label><input id="taskName" required maxlength="100" placeholder="Ej. Exposición de psicología"></div>
+<div class="field"><label for="taskDate">Fecha</label><input id="taskDate" type="date" required></div>
+<div class="field"><label for="taskTime">Hora (opcional)</label><input id="taskTime" type="time"></div>
+<div class="field"><label for="taskType">Tipo</label><select id="taskType"><option value="Universidad">Universidad</option><option value="Parcial">Parcial / examen</option><option value="Entrega">Entrega de trabajo</option><option value="Personal">Personal</option><option value="Otro">Otro</option></select></div>
+<div class="field"><label for="taskPriority">Prioridad</label><select id="taskPriority"><option value="Normal">Normal</option><option value="Importante">Importante</option><option value="Urgente">Urgente</option></select></div>
+<div class="field full"><label for="taskMatrix">¿Dónde quieres organizarla?</label><select id="taskMatrix"><option value="now">🌸 Pendientes</option><option value="delegate">🧡 Parciales</option><option value="later">🌿 Fechas importantes</option></select></div>
+<div class="field full"><label for="taskReminder">Aviso anticipado</label><select id="taskReminder"><option value="0">Sin aviso anticipado</option><option value="10">10 minutos antes</option><option value="60">1 hora antes</option><option value="1440">1 día antes</option><option value="4320">3 días antes</option><option value="10080">1 semana antes</option></select></div>
+<div class="field full"><label for="taskNotes">Notas (opcional)</label><textarea id="taskNotes" maxlength="300" placeholder="Tema que debo estudiar, materiales, salón…"></textarea></div>
+</div><div class="form-actions"><button type="button" class="secondary" id="cancelForm">Cancelar</button><button type="submit" class="primary">Guardar ♡</button></div></form></div>
+</section>
+</div>
+<div class="bottom-note">Hecho con cariño para ti, Fresita ♡<br>Tu agenda se guarda en este navegador de este dispositivo.</div>
+</div><div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const today=new Date(); today.setHours(0,0,0,0);
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseDate=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const fmtLong=d=>new Intl.DateTimeFormat('es-CO',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(d);
+const fmtShort=s=>{if(!s)return '';return new Intl.DateTimeFormat('es-CO',{day:'numeric',month:'short'}).format(parseDate(s))};
+let selected=iso(today), shownMonth=new Date(today.getFullYear(),today.getMonth(),1), filter='day';
+let tasks=[];try{tasks=JSON.parse(localStorage.getItem('fresitaAgendaTasks')||'[]')}catch(e){tasks=[]}
+const save=()=>localStorage.setItem('fresitaAgendaTasks',JSON.stringify(tasks));
+$('todayLabel').textContent=fmtLong(today).replace(/^./,c=>c.toUpperCase());
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderCalendar(){
+ $('monthTitle').textContent=new Intl.DateTimeFormat('es-CO',{month:'long',year:'numeric'}).format(shownMonth).replace(/^./,c=>c.toUpperCase());
+ const first=new Date(shownMonth.getFullYear(),shownMonth.getMonth(),1), daysInMonth=new Date(shownMonth.getFullYear(),shownMonth.getMonth()+1,0).getDate(), offset=(first.getDay()+6)%7;
+ let out='';
+ for(let i=0;i<offset;i++) out+='<span class="day-placeholder" aria-hidden="true"></span>';
+ for(let day=1;day<=daysInMonth;day++){const d=new Date(shownMonth.getFullYear(),shownMonth.getMonth(),day);const key=iso(d), n=tasks.filter(t=>t.date===key).length;
+ out+=`<button class="day ${key===selected?'selected':''} ${key===iso(today)?'today':''}" data-date="${key}"><span>${day}</span><span class="dots">${n?'<i></i>'.repeat(Math.min(n,3)):''}</span></button>`}
+ $('calendarGrid').innerHTML=out;
+ $('calendarGrid').querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{selected=b.dataset.date;shownMonth=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);filter='day';syncTabs();render()});
+}
+function syncTabs(){$$('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter))}
+function $$(s){return [...document.querySelectorAll(s)]}
+function renderTasks(){
+ let list=tasks.filter(t=>filter==='day'?t.date===selected:filter==='upcoming'?t.date>=iso(today)&&!t.done:t);
+ list.sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||'')||Number(a.done)-Number(b.done));
+ $('tasksHeading').textContent=filter==='day'?(selected===iso(today)?'Tareas de hoy':fmtLong(parseDate(selected))):filter==='upcoming'?'Próximas tareas':'Todas tus tareas';
+ $('taskCount').textContent=list.length?`${list.length} ${list.length===1?'actividad':'actividades'}`:'';
+ if(!list.length){$('taskList').innerHTML=`<div class="empty">🌸<strong>Todo tranquilito por aquí</strong>${filter==='day'?'No tienes actividades para este día. ¡Puedes disfrutarlo o añadir una nueva!':'No hay actividades en esta lista todavía.'}</div>`}
+ else $('taskList').innerHTML=list.map(t=>`<div class="task ${t.done?'done':''}"><button class="check" data-check="${t.id}" aria-label="Marcar completada">${t.done?'✓':''}</button><div class="task-content"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span>♡ ${fmtShort(t.date)}</span>${t.time?`<span>◷ ${esc(t.time)}</span>`:''}<span class="pill ${t.type==='Personal'?'personal':t.type==='Parcial'?'exam':''}">${esc(t.type)}</span>${t.priority!=='Normal'?`<span class="pill">${esc(t.priority)}</span>`:''}${t.reminder>0?'<span>🔔 aviso</span>':''}</div>${t.notes?`<div class="task-meta">${esc(t.notes)}</div>`:''}</div><button class="delete" data-delete="${t.id}" aria-label="Eliminar tarea">×</button></div>`).join('');
+ $('taskList').querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>{const t=tasks.find(t=>t.id===b.dataset.check);if(t){t.done=!t.done;save();render()}});
+ $('taskList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{if(confirm('¿Quieres eliminar esta actividad?')){tasks=tasks.filter(t=>t.id!==b.dataset.delete);save();render();toast('Actividad eliminada')}})
+}
+
+function renderMatrix(){
+ const visible=tasks.filter(t=>!t.done);
+ const monthKey=iso(shownMonth).slice(0,7);
+ const groups={
+  now:visible,
+  plan:visible.filter(t=>t.date.startsWith(monthKey)),
+  delegate:visible.filter(t=>t.type==='Parcial'),
+  later:visible.filter(t=>t.type==='Entrega')
+ };
+ Object.keys(groups).forEach(key=>{
+  const el=$('matrix-'+key);const arr=[...groups[key]].sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));
+  el.innerHTML=arr.length?arr.map(t=>`<div class="matrix-item"><button class="check" data-mcheck="${t.id}" aria-label="Completar tarea"></button><div style="flex:1;min-width:0"><div class="task-title">${esc(t.name)}</div><div class="task-meta">${fmtShort(t.date)}${t.time?' · '+esc(t.time):''}</div></div><button class="delete" data-mdelete="${t.id}" aria-label="Eliminar tarea">×</button></div>`).join(''):'<div class="matrix-empty">Sin recordatorios ♡</div>';
+ });
+ document.querySelectorAll('[data-mcheck]').forEach(b=>b.onclick=()=>{const t=tasks.find(t=>t.id===b.dataset.mcheck);if(t){t.done=true;save();render()}});
+ document.querySelectorAll('[data-mdelete]').forEach(b=>b.onclick=()=>{if(confirm('¿Quieres eliminar esta actividad?')){tasks=tasks.filter(t=>t.id!==b.dataset.mdelete);save();render()}});
+}
+function renderStats(){$('statToday').textContent=tasks.filter(t=>t.date===iso(today)&&!t.done).length;$('statPending').textContent=tasks.filter(t=>!t.done).length;$('statDone').textContent=tasks.filter(t=>t.done).length}
+function render(){renderCalendar();renderMatrix();renderTasks();renderStats()}
+function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2300)}
+$('prevMonth').onclick=()=>{shownMonth=new Date(shownMonth.getFullYear(),shownMonth.getMonth()-1,1);renderCalendar()};
+$('nextMonth').onclick=()=>{shownMonth=new Date(shownMonth.getFullYear(),shownMonth.getMonth()+1,1);renderCalendar()};
+$$('.tabs button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;syncTabs();renderTasks()});
+document.querySelectorAll('[data-matrix-add]').forEach(b=>b.onclick=()=>{$('formPanel').classList.add('open');$('taskDate').value=selected;$('taskMatrix').value=b.dataset.matrixAdd;$('taskName').focus();$('formPanel').scrollIntoView({behavior:'smooth',block:'nearest'})});
+$('openForm').onclick=()=>{$('formPanel').classList.toggle('open');$('taskDate').value=selected;if($('formPanel').classList.contains('open'))$('taskName').focus()};
+$('cancelForm').onclick=()=>{$('formPanel').classList.remove('open');$('taskForm').reset()};
+$('taskForm').onsubmit=e=>{e.preventDefault();const task={id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name:$('taskName').value.trim(),date:$('taskDate').value,time:$('taskTime').value,type:$('taskType').value,priority:$('taskPriority').value,matrix:$('taskMatrix').value,reminder:Number($('taskReminder').value),notes:$('taskNotes').value.trim(),done:false};if(!task.name||!task.date)return;tasks.push(task);save();selected=task.date;const d=parseDate(selected);shownMonth=new Date(d.getFullYear(),d.getMonth(),1);filter='day';syncTabs();render();$('taskForm').reset();$('formPanel').classList.remove('open');toast('Guardadito, Fresita ♡')};
+render();
+</script>
+<script>
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
